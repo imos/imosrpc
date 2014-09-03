@@ -13,12 +13,13 @@ var testServer *httptest.Server = nil
 func init() {
 	imosrpc.RegisterHandler("call_test", ExampleHandler)
 	testServer = httptest.NewServer(http.HandlerFunc(imosrpc.DefaultHandler))
+	imosrpc.SetHostname(testServer.URL)
 }
 
 func TestCall(t *testing.T) {
 	request := ExampleRequest{Value1: 100, Value2: 200}
 	response := ExampleResponse{}
-	if err := imosrpc.Call(testServer.URL+"/call_test", request, &response); err != nil {
+	if err := imosrpc.Call("call_test", request, &response); err != nil {
 		t.Fatal(err)
 	}
 	expectedResponse := ExampleResponse{Addition: 300, Subtraction: -100}
