@@ -50,7 +50,7 @@ func post(url string, data url.Values) (response *http.Response, err error) {
 		return
 	}
 	response = &http.Response{
-		Status:        fmt.Sprintf("%d", rw.StatusCode),
+		Status:        fmt.Sprintf("%d %s", rw.StatusCode, http.StatusText(rw.StatusCode)),
 		StatusCode:    rw.StatusCode,
 		Proto:         "HTTP",
 		ProtoMajor:    1,
