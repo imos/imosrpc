@@ -15,14 +15,24 @@ func init() {
 	testServer = httptest.NewServer(http.HandlerFunc(imosrpc.DefaultHandler))
 }
 
-func TestCall(t *testing.T) {
+func call(t *testing.T) {
 	request := ExampleRequest{Value1: 100, Value2: 200}
 	response := ExampleResponse{}
-	if err := imosrpc.Call(testServer.URL+"/call_test", request, &response); err != nil {
+	if err := imosrpc.Call("call_test", request, &response); err != nil {
 		t.Fatal(err)
 	}
 	expectedResponse := ExampleResponse{Addition: 300, Subtraction: -100}
 	if !reflect.DeepEqual(expectedResponse, response) {
 		t.Errorf("expected: %#v, actual: %#v.", expectedResponse, response)
 	}
+}
+
+func TestCall(t *testing.T) {
+	imosrpc.SetHostname(testServer.URL)
+	call(t)
+}
+
+func TestInternalCall(t *testing.T) {
+	imosrpc.SetHostname(imosrpc.InternalHostname)
+	call(t)
 }
