@@ -8,19 +8,17 @@ benchmark: build
 	go test -v -bench .
 .PHONY: benchmark
 
-integration-test: build
-	mysql -u root -e 'SELECT VERSION();'
-	mysql -u root -e 'CREATE DATABASE test;'
-	mysql -u root -D test < integration_test.sql
-	go test -v --enable_integration_test
-.PHONY: integration-test
+coverage: build
+	go get code.google.com/p/go.tools/cmd/cover
+	go test -coverprofile=/tmp/coverage
+	go tool cover -html=/tmp/coverage
+.PHONY: coverage
 
 build: get
 	go build
 .PHONY: build
 
 get: version
-	go get github.com/go-sql-driver/mysql
 	go get
 .PHONY: get
 
