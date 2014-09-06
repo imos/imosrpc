@@ -11,6 +11,10 @@ import (
 
 var rpcMethods = map[string]interface{}{}
 
+func init() {
+	http.HandleFunc("/", DefaultHandler)
+}
+
 func RegisterHandler(method string, handler interface{}) {
 	method = strings.TrimPrefix(method, "/")
 	handlerType := reflect.ValueOf(handler).Type()
